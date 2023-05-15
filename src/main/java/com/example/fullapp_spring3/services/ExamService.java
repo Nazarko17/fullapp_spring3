@@ -1,7 +1,6 @@
 package com.example.fullapp_spring3.services;
 
 import com.example.fullapp_spring3.daos.ExamDAO;
-import com.example.fullapp_spring3.models.Category;
 import com.example.fullapp_spring3.models.Exam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,15 +37,15 @@ public class ExamService {
         examDAO.delete(exam);
     }
 
-    public List<Exam> examListByCategory(Category category) {
-        return examDAO.findByCategory(category);
+    public List<Exam> examListByCategoryId(int id) {
+        return examDAO.findByCategoryId(id);
     }
 
     public List<Exam> findByActive() {
         return examDAO.findByIsActive(true);
     }
 
-    public List<Exam> findByCategoryAndActive(Category category) {
-        return examDAO.findByCategoryAndIsActive(category, true);
+    public List<Exam> findByCategoryIdAndIsActive(int id) {
+        return examDAO.findByCategoryIdAndIsActive(id, true);
     }
 }

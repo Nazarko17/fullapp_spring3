@@ -4,7 +4,7 @@ import com.example.fullapp_spring3.models.Exam;
 import com.example.fullapp_spring3.models.Question;
 import com.example.fullapp_spring3.services.ExamService;
 import com.example.fullapp_spring3.services.QuestionService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,14 +12,12 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/question")
-@CrossOrigin("*")
+@RequiredArgsConstructor
 public class QuestionController {
 
-    @Autowired
-    private QuestionService questionService;
+    private final QuestionService questionService;
 
-    @Autowired
-    private ExamService examService;
+    private final ExamService examService;
 
     @PostMapping("/")
     public ResponseEntity<Question> saveQuestion(@RequestBody Question question) {
@@ -31,6 +29,7 @@ public class QuestionController {
         return ResponseEntity.ok(questionService.updateQuestion(question));
     }
 
+    // ------------------------------------
     @GetMapping("/exam/{examId}")
     public ResponseEntity<?> finQuestionsByExam(@PathVariable("examId") int examId) {
         Exam exam = examService.getExam(examId);
@@ -55,6 +54,8 @@ public class QuestionController {
         questionService.deleteQuestion(questionId);
     }
 
+
+    // ---------------------------------------------
     @GetMapping("/exam/all/{examId}")
     public ResponseEntity<?> finQuestionsByExamAsAdmin(@PathVariable ("examId") int id) {
         Exam exam = new Exam();
@@ -63,6 +64,7 @@ public class QuestionController {
         return ResponseEntity.ok(questions);
     }
 
+    // ---------------------------------------------
     @PostMapping("/evaluate-exam")
     public ResponseEntity<?> evaluateExam(@RequestBody List<Question> questions) {
         double maxPoints = 0;

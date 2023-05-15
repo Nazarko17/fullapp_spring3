@@ -1,9 +1,8 @@
 package com.example.fullapp_spring3.controllers;
 
-import com.example.fullapp_spring3.models.Category;
 import com.example.fullapp_spring3.models.Exam;
 import com.example.fullapp_spring3.services.ExamService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,10 +10,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/exam")
-@CrossOrigin("*")
+@RequiredArgsConstructor
 public class ExamController {
-    @Autowired
-    private ExamService examService;
+
+    private final ExamService examService;
 
     @PostMapping("/")
     public ResponseEntity<Exam> saveExam(@RequestBody Exam exam) {
@@ -43,9 +42,9 @@ public class ExamController {
 
     @GetMapping("/category/{categoryId}")
     public List<Exam> examListByCategory(@PathVariable("categoryId") int categoryId) {
-        Category category = new Category();
-        category.setId(categoryId);
-        return examService.examListByCategory(category);
+//        Category category = new Category();
+//        category.setId(categoryId);
+        return examService.examListByCategoryId(categoryId);
     }
 
     @GetMapping("/active")
@@ -55,8 +54,8 @@ public class ExamController {
 
     @GetMapping("/category/active/{categoryId}")
     public List<Exam> findByCategoryAndActive(@PathVariable("categoryId") int categoryId) {
-        Category category = new Category();
-        category.setId(categoryId);
-        return examService.findByCategoryAndActive(category);
+//        Category category = new Category();
+//        category.setId(categoryId);
+        return examService.findByCategoryIdAndIsActive(categoryId);
     }
 }

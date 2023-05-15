@@ -2,22 +2,21 @@ package com.example.fullapp_spring3.controllers;
 
 import com.example.fullapp_spring3.models.Category;
 import com.example.fullapp_spring3.services.CategoryService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/category")
-@CrossOrigin("*")
+@RequiredArgsConstructor
 public class CategoryController {
 
-    @Autowired
-    private CategoryService categoryService;
+    private final CategoryService categoryService;
 
     @PostMapping("/")
     public ResponseEntity<Category> saveCategory(@RequestBody Category category) {
-        Category savedCategory = categoryService.addCategory(category);
-        return ResponseEntity.ok(savedCategory);
+//        Category savedCategory = categoryService.addCategory(category);
+        return ResponseEntity.ok(categoryService.addCategory(category));
     }
 
     @GetMapping("/{id}")

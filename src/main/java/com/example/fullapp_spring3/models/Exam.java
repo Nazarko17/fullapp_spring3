@@ -32,4 +32,7 @@ public class Exam {
     @JsonIgnore
     private Set<Question> questions = new HashSet<>();
 
+    public Exam(int id) {
+        this.id = id;
+    }
 }

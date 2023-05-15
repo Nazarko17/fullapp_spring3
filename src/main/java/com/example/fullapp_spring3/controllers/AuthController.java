@@ -7,7 +7,6 @@ import com.example.fullapp_spring3.models.User;
 import com.example.fullapp_spring3.services.AuthService;
 import com.example.fullapp_spring3.services.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,13 +14,11 @@ import java.security.Principal;
 
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin("*")
 public class AuthController {
 
     private final AuthService service;
 
-    @Autowired
-    private UserDetailsServiceImpl userDetailsService;
+    private final UserDetailsServiceImpl userDetailsService;
 
     @PostMapping("/register")
     public ResponseEntity<JwtResponse> register(
