@@ -1,39 +1,54 @@
 package com.example.fullapp_spring3.services;
 
 import com.example.fullapp_spring3.daos.CategoryDAO;
+import com.example.fullapp_spring3.dtos.CategoryDTO;
+import com.example.fullapp_spring3.dtos.CategoryDTOMapper;
 import com.example.fullapp_spring3.models.Category;
-import com.example.fullapp_spring3.models.Exam;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class CategoryService {
-    @Autowired
-    private CategoryDAO categoryDAO;
 
+    private final ModelMapper modelMapper;
+    private final CategoryDAO categoryDAO;
+    private final CategoryDTOMapper categoryDTOMapper;
 
-    public Category addCategory(Category category) {
-        return categoryDAO.save(category);
+    public CategoryDTO findCategory(int id) {
+        return categoryDTOMapper.apply(categoryDAO.findById(id).get());
     }
 
-    public Category updateCategory(Category category) {
-        return categoryDAO.save(category);
+    public Set<CategoryDTO> findCategories() {
+        return new LinkedHashSet<>(categoryDAO.findAll().stream().map(categoryDTOMapper).collect(Collectors.toSet()));
     }
 
-    public Set<Category> findCategories() {
-        return new LinkedHashSet<>(categoryDAO.findAll());
+    public CategoryDTO saveCategory(CategoryDTO categoryDTO) {
+        Category category = categoryDAO.save(convertToEntity(categoryDTO));
+        return convertToDto(category);
     }
 
-    public Category getCategory(int id) {
-        return categoryDAO.findById(id).get();
+    public CategoryDTO updateCategory(CategoryDTO categoryDTO) {
+        Category category = categoryDAO.save(convertToEntity(categoryDTO));
+        return convertToDto(category);
     }
 
     public void deleteCategory(int id) {
         Category category = new Category();
         category.setId(id);
         categoryDAO.delete(category);
+    }
+
+    public CategoryDTO convertToDto(Category category) {
+        return modelMapper.map(category, CategoryDTO.class);
+    }
+
+    public Category convertToEntity(CategoryDTO categoryDTO) {
+        return modelMapper.map(categoryDTO, Category.class);
     }
 }

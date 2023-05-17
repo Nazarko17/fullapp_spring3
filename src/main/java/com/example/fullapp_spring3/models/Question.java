@@ -15,7 +15,7 @@ public class Question {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(length = 5000)
+    @Column(length = 800)
     private String content;
     private String image;
     private String option1;

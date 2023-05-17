@@ -1,10 +1,12 @@
 package com.example.fullapp_spring3.controllers;
 
-import com.example.fullapp_spring3.models.Category;
+import com.example.fullapp_spring3.dtos.CategoryDTO;
 import com.example.fullapp_spring3.services.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Set;
 
 @RestController
 @RequestMapping("/category")
@@ -13,25 +15,24 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-    @PostMapping("/")
-    public ResponseEntity<Category> saveCategory(@RequestBody Category category) {
-//        Category savedCategory = categoryService.addCategory(category);
-        return ResponseEntity.ok(categoryService.addCategory(category));
-    }
-
     @GetMapping("/{id}")
-    public Category getCategoryById(@PathVariable("id") int id) {
-        return categoryService.getCategory(id);
+    public CategoryDTO findCategory(@PathVariable("id") int id) {
+        return categoryService.findCategory(id);
     }
 
     @GetMapping("/")
-    public ResponseEntity<?> listOfCategories() {
+    public ResponseEntity<Set<CategoryDTO>> findCategories() {
         return ResponseEntity.ok(categoryService.findCategories());
     }
 
+    @PostMapping("/")
+    public ResponseEntity<CategoryDTO> saveCategory(@RequestBody CategoryDTO categoryDTO) {
+        return ResponseEntity.ok(categoryService.saveCategory(categoryDTO));
+    }
+
     @PutMapping("/")
-    public Category updateCategory(@RequestBody Category category) {
-        return categoryService.updateCategory(category);
+    public CategoryDTO updateCategory(@RequestBody CategoryDTO categoryDTO) {
+        return categoryService.updateCategory(categoryDTO);
     }
 
     @DeleteMapping("/{id}")

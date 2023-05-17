@@ -1,6 +1,6 @@
 package com.example.fullapp_spring3.controllers;
 
-import com.example.fullapp_spring3.models.Exam;
+import com.example.fullapp_spring3.dtos.ExamDTO;
 import com.example.fullapp_spring3.services.ExamService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,14 +15,9 @@ public class ExamController {
 
     private final ExamService examService;
 
-    @PostMapping("/")
-    public ResponseEntity<Exam> saveExam(@RequestBody Exam exam) {
-        return ResponseEntity.ok(examService.addExam(exam));
-    }
-
-    @PutMapping("/")
-    public ResponseEntity<Exam> updateExam(@RequestBody Exam exam) {
-        return ResponseEntity.ok(examService.updateExam(exam));
+    @GetMapping("/{examId}")
+    public ExamDTO findExamById(@PathVariable("examId") int id) {
+        return examService.findExam(id);
     }
 
     @GetMapping("/")
@@ -30,9 +25,14 @@ public class ExamController {
         return ResponseEntity.ok(examService.findExams());
     }
 
-    @GetMapping("/{examId}")
-    public Exam findExamById(@PathVariable("examId") int id) {
-        return examService.getExam(id);
+    @PostMapping("/")
+    public ResponseEntity<ExamDTO> saveExam(@RequestBody ExamDTO examDTO) {
+        return ResponseEntity.ok(examService.saveExam(examDTO));
+    }
+
+    @PutMapping("/")
+    public ResponseEntity<ExamDTO> updateExam(@RequestBody ExamDTO examDTO) {
+        return ResponseEntity.ok(examService.updateExam(examDTO));
     }
 
     @DeleteMapping("/{examId}")
@@ -40,22 +40,18 @@ public class ExamController {
         examService.deleteExam(id);
     }
 
-    @GetMapping("/category/{categoryId}")
-    public List<Exam> examListByCategory(@PathVariable("categoryId") int categoryId) {
-//        Category category = new Category();
-//        category.setId(categoryId);
-        return examService.examListByCategoryId(categoryId);
+    @GetMapping("/active")
+    public List<ExamDTO> findByActive() {
+        return examService.findByIsActive();
     }
 
-    @GetMapping("/active")
-    public List<Exam> findByActive() {
-        return examService.findByActive();
+    @GetMapping("/category/{categoryId}")
+    public List<ExamDTO> findByCategoryId(@PathVariable("categoryId") int categoryId) {
+        return examService.findByCategoryId(categoryId);
     }
 
     @GetMapping("/category/active/{categoryId}")
-    public List<Exam> findByCategoryAndActive(@PathVariable("categoryId") int categoryId) {
-//        Category category = new Category();
-//        category.setId(categoryId);
+    public List<ExamDTO> findByCategoryIdAndIsActive(@PathVariable("categoryId") int categoryId) {
         return examService.findByCategoryIdAndIsActive(categoryId);
     }
 }

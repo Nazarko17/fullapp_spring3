@@ -1,34 +1,47 @@
 package com.example.fullapp_spring3.services;
 
 import com.example.fullapp_spring3.daos.ExamDAO;
+import com.example.fullapp_spring3.dtos.ExamDTO;
+import com.example.fullapp_spring3.dtos.ExamDTOMapper;
 import com.example.fullapp_spring3.models.Exam;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ExamService {
 
-    @Autowired
-    private ExamDAO examDAO;
+    private final ExamDAO examDAO;
+    private final CategoryService categoryService;
+    private final ModelMapper modelMapper;
+    private final ExamDTOMapper examDTOMapper;
 
-    public Exam addExam(Exam exam) {
-        return examDAO.save(exam);
+    public ExamDTO findExam(int id) {
+        return examDTOMapper.apply(examDAO.findById(id).get());
     }
 
-    public Exam updateExam(Exam exam) {
-        return examDAO.save(exam);
+    public Set<ExamDTO> findExams() {
+        return new LinkedHashSet<>(examDAO.findAll().stream().map(examDTOMapper).collect(Collectors.toSet()));
     }
 
-    public Set<Exam> findExams() {
-        return new LinkedHashSet<>(examDAO.findAll());
+    public ExamDTO saveExam(ExamDTO examDTO) {
+        Exam exam = examDAO.save(convertToEntity(examDTO));
+        ExamDTO examDTO2 = convertToDto(exam);
+        examDTO2.setCategoryDTO(categoryService.findCategory(examDTO.getCategoryDTO().getId()));
+        return examDTO2;
     }
 
-    public Exam getExam(int id) {
-        return examDAO.findById(id).get();
+    public ExamDTO updateExam(ExamDTO examDTO) {
+        Exam exam = examDAO.save(convertToEntity(examDTO));
+        ExamDTO examDTO2 = convertToDto(exam);
+        examDTO2.setCategoryDTO(categoryService.findCategory(examDTO.getCategoryDTO().getId()));
+        return examDTO2;
     }
 
     public void deleteExam(int id) {
@@ -37,15 +50,24 @@ public class ExamService {
         examDAO.delete(exam);
     }
 
-    public List<Exam> examListByCategoryId(int id) {
-        return examDAO.findByCategoryId(id);
+    public List<ExamDTO> findByIsActive() {
+
+        return examDAO.findByIsActive(true).stream().map(examDTOMapper).collect(Collectors.toList());
     }
 
-    public List<Exam> findByActive() {
-        return examDAO.findByIsActive(true);
+    public List<ExamDTO> findByCategoryId(int id) {
+        return examDAO.findByCategoryId(id).stream().map(examDTOMapper).collect(Collectors.toList());
     }
 
-    public List<Exam> findByCategoryIdAndIsActive(int id) {
-        return examDAO.findByCategoryIdAndIsActive(id, true);
+    public List<ExamDTO> findByCategoryIdAndIsActive(int id) {
+        return examDAO.findByCategoryIdAndIsActive(id, true).stream().map(examDTOMapper).collect(Collectors.toList());
+    }
+
+    public ExamDTO convertToDto(Exam exam) {
+        return modelMapper.map(exam, ExamDTO.class);
+    }
+
+    public Exam convertToEntity(ExamDTO examDTO) {
+        return modelMapper.map(examDTO, Exam.class);
     }
 }

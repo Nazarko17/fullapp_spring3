@@ -16,12 +16,14 @@ import java.util.Set;
 @Entity
 @Table(name = "exams")
 public class Exam {
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
+    private int id;
     private String title;
     private String description;
     private String maxPoints;
     private String numberOfQuestions;
+
     @JsonProperty("isActive")
     private boolean isActive = false;
 

@@ -1,6 +1,5 @@
 package com.example.fullapp_spring3.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,8 +19,8 @@ import java.util.List;
 @AllArgsConstructor
 @Table(name = "users")
 public class User implements UserDetails {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String username;
     private String password;
@@ -29,7 +28,6 @@ public class User implements UserDetails {
     private String surname;
     private String email;
     private String phoneNumber;
-
     private String avatar;
 
     @Enumerated(EnumType.STRING)
@@ -40,21 +38,23 @@ public class User implements UserDetails {
         return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
+    private boolean isAccountNonExpired;
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return this.isAccountNonExpired;
     }
 
+    private boolean isAccountNonLocked;
     @Override
-    public boolean isAccountNonLocked() { return true; }
+    public boolean isAccountNonLocked() { return this.isAccountNonLocked; }
 
+    private boolean isCredentialsNonExpired;
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        return this.isCredentialsNonExpired;
     }
 
     private boolean isEnabled;
-
     @Override
     public boolean isEnabled() {
         return this.isEnabled;
