@@ -1,0 +1,44 @@
+services:
+#  fullapp_spring3:
+#    image: fullapp_spring3
+#    container_name: fullapp_spring3
+#    ports:
+#      - 8080:8080
+#    environment:
+#      - SPRING_DATASOURCE_URL=jdbc:postgresql://PostgreSQL:5432/fullappDB3
+#      - SPRING_DATASOURCE_USERNAME=postgres
+#      - SPRING_DATASOURCE_PASSWORD=postgres
+#      - POSTGRES_DB=fullappDB3
+#    networks:
+#      - spring-postgres
+  postgres:
+    image: postgres
+    restart: always
+    container_name: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres228
+      - POSTGRES_DB=fullappDB3
+    expose:
+      - 5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - spring-postgres
+#    networks:
+#      - spring-postgres
+#  pg-admin:
+#    image: dpage/pgadmin4
+#    environment:
+#      - PGADMIN_DEFAULT_EMAIL=admin@gmail.com
+#      - PGADMIN_DEFAULT_PASSWORD=admin
+#      - PGADMIN_LISTEN_PORT=5050
+#    ports:
+#      - 5050:5050
+
+volumes:
+  pgdata:
+networks:
+  spring-postgres:
+
+#psql -h localhost -U postgres -p 5432 -d fullappDB3
