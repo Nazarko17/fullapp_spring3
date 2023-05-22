@@ -1,10 +1,10 @@
 package com.example.fullapp_spring3.models;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+@Builder
+@AllArgsConstructor
 @Getter
 @Setter
 @NoArgsConstructor

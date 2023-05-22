@@ -23,7 +23,7 @@ public class ExamService {
     private final ExamDTOMapper examDTOMapper;
 
     public ExamDTO findExam(int id) {
-        return examDTOMapper.apply(examDAO.findById(id).get());
+        return examDTOMapper.apply(examDAO.findById(id));
     }
 
     public Set<ExamDTO> findExams() {
@@ -51,7 +51,6 @@ public class ExamService {
     }
 
     public List<ExamDTO> findByIsActive() {
-
         return examDAO.findByIsActive(true).stream().map(examDTOMapper).collect(Collectors.toList());
     }
 

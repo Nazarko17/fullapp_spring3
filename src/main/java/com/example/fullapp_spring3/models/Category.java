@@ -13,6 +13,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @ToString
+@Builder
 @Table(name = "categories")
 public class Category {
 
@@ -27,5 +28,11 @@ public class Category {
 
     public Category(int id) {
         this.id = id;
+    }
+
+    public Category(int id, String title, String description) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
     }
 }

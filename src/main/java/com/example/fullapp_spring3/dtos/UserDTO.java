@@ -1,9 +1,13 @@
 package com.example.fullapp_spring3.dtos;
 
 import com.example.fullapp_spring3.models.Role;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@Builder
+@NoArgsConstructor
 public class UserDTO {
 
     private int id;

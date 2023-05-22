@@ -16,7 +16,11 @@ public class UserService {
     private final ModelMapper modelMapper;
     private final UserDTOMapper userDTOMapper;
 
+
     public UserDTO findUser(String username) {
+        if(username == null || username.equals("   ") || username.equals("")){
+            throw new IllegalArgumentException("Username is not valid! Username provided " + username);
+        }
         User user = userDAO.findUserByUsername(username);
         return userDTOMapper.apply(user);
     }

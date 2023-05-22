@@ -22,7 +22,7 @@ public class QuestionService {
     private final QuestionDTOMapper questionDTOMapper;
 
     public QuestionDTO findQuestion(int id) {
-        return questionDTOMapper.apply(questionDAO.findById(id).get());
+        return questionDTOMapper.apply(questionDAO.findById(id));
     }
 
     public QuestionDTO saveQuestion(QuestionDTO questionDTO) {

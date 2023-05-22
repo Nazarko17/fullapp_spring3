@@ -1,10 +1,12 @@
 package com.example.fullapp_spring3.dtos;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
+@Builder
 public class QuestionDTO {
     int id;
     String content;

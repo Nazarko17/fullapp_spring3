@@ -3,13 +3,13 @@ package com.example.fullapp_spring3.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
 
+@Builder
+@AllArgsConstructor
 @Getter
 @Setter
 @NoArgsConstructor

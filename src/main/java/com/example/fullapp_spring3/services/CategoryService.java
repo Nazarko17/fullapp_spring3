@@ -21,7 +21,7 @@ public class CategoryService {
     private final CategoryDTOMapper categoryDTOMapper;
 
     public CategoryDTO findCategory(int id) {
-        return categoryDTOMapper.apply(categoryDAO.findById(id).get());
+        return categoryDTOMapper.apply(categoryDAO.findById(id));
     }
 
     public Set<CategoryDTO> findCategories() {
