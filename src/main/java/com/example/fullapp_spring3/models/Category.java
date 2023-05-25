@@ -21,6 +21,7 @@ public class Category {
     private int id;
     private String title;
     private String description;
+    int numberOfExams = 0;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     @JsonIgnore
@@ -30,9 +31,10 @@ public class Category {
         this.id = id;
     }
 
-    public Category(int id, String title, String description) {
+    public Category(int id, String title, String description, int numberOfExams) {
         this.id = id;
         this.title = title;
         this.description = description;
+        this.numberOfExams = numberOfExams;
     }
 }

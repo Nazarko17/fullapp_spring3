@@ -3,7 +3,9 @@ package com.example.fullapp_spring3.services;
 import com.example.fullapp_spring3.daos.ExamDAO;
 import com.example.fullapp_spring3.dtos.ExamDTO;
 import com.example.fullapp_spring3.dtos.ExamDTOMapper;
+import com.example.fullapp_spring3.models.Category;
 import com.example.fullapp_spring3.models.Exam;
+import com.example.fullapp_spring3.models.Question;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -18,9 +20,9 @@ import java.util.stream.Collectors;
 public class ExamService {
 
     private final ExamDAO examDAO;
-    private final CategoryService categoryService;
     private final ModelMapper modelMapper;
     private final ExamDTOMapper examDTOMapper;
+    private final CategoryService categoryService;
 
     public ExamDTO findExam(int id) {
         return examDTOMapper.apply(examDAO.findById(id));
@@ -33,7 +35,9 @@ public class ExamService {
     public ExamDTO saveExam(ExamDTO examDTO) {
         Exam exam = examDAO.save(convertToEntity(examDTO));
         ExamDTO examDTO2 = convertToDto(exam);
-        examDTO2.setCategoryDTO(categoryService.findCategory(examDTO.getCategoryDTO().getId()));
+        int categoryID = examDTO.getCategoryDTO().getId();
+        examDTO2.setCategoryDTO(categoryService.findCategory(categoryID));
+        categoryService.saveNumberOfExams(categoryID);
         return examDTO2;
     }
 
@@ -45,9 +49,9 @@ public class ExamService {
     }
 
     public void deleteExam(int id) {
-        Exam exam = new Exam();
-        exam.setId(id);
-        examDAO.delete(exam);
+        Category category = examDAO.findById(id).getCategory();
+        examDAO.deleteById(id);
+        categoryService.saveNumberOfExams(category.getId());
     }
 
     public List<ExamDTO> findByIsActive() {
@@ -68,5 +72,26 @@ public class ExamService {
 
     public Exam convertToEntity(ExamDTO examDTO) {
         return modelMapper.map(examDTO, Exam.class);
+    }
+
+    public Exam saveMaxPointsAndNumberOfQuestions(int id) {
+        Exam exam = examDAO.findById(id);
+        exam.setMaxPoints(findMaxPoints(id));
+        exam.setNumberOfQuestions(findNumberOfQuestions(id));
+        return examDAO.save(exam);
+    }
+
+    public int findMaxPoints(int id) {
+        return examDAO.findById(id).getQuestions().stream()
+                .mapToInt(Question::getPoints)
+                .sum();
+    }
+
+    public int findNumberOfQuestions(int id) {
+        return examDAO.findById(id).getQuestions().size();
+    }
+
+    public int calculatePointsToPass(int id) {
+        return (examDAO.findById(id).getPassPercentage() * findMaxPoints(id)) / 100;
     }
 }

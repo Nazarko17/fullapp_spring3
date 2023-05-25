@@ -21,8 +21,10 @@ public class Exam {
     private int id;
     private String title;
     private String description;
-    private String maxPoints;
-    private String numberOfQuestions;
+    private int maxPoints = 0;
+    private int numberOfQuestions = 0;
+    private int passPercentage;
+    private String difficulty;
 
     @JsonProperty("isActive")
     private boolean isActive = false;

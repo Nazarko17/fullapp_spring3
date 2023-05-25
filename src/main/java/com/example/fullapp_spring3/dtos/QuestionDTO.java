@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class QuestionDTO {
     int id;
     String content;
-    String image;
+    int points;
     String option1;
     String option2;
     String option3;
@@ -20,10 +20,10 @@ public class QuestionDTO {
 
     ExamDTO examDTO;
 
-    public QuestionDTO(int id, String content, String image, String option1, String option2, String option3, String option4, String correctAnswer, String answer, ExamDTO examDTO) {
+    public QuestionDTO(int id, String content, int points, String option1, String option2, String option3, String option4, String correctAnswer, String answer, ExamDTO examDTO) {
         this.id = id;
         this.content = content;
-        this.image = image;
+        this.points = points;
         this.option1 = option1;
         this.option2 = option2;
         this.option3 = option3;

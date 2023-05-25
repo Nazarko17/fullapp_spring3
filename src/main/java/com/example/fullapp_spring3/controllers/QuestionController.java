@@ -1,7 +1,7 @@
 package com.example.fullapp_spring3.controllers;
 
 import com.example.fullapp_spring3.dtos.QuestionDTO;
-import com.example.fullapp_spring3.services.ExamService;
+import com.example.fullapp_spring3.models.ExamResult;
 import com.example.fullapp_spring3.services.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,11 +15,15 @@ import java.util.*;
 public class QuestionController {
 
     private final QuestionService questionService;
-    private final ExamService examService;
 
     @GetMapping("/{questionId}")
     public QuestionDTO findQuestion(@PathVariable("questionId") int questionId) {
         return questionService.findQuestion(questionId);
+    }
+
+    @GetMapping("/exam/all/{examId}")
+    public ResponseEntity<?> finQuestionsByExamAsAdmin(@PathVariable ("examId") int id) {
+        return ResponseEntity.ok(questionService.finQuestionsByExamAsAdmin(id));
     }
 
     @PostMapping("/")
@@ -37,13 +41,8 @@ public class QuestionController {
         questionService.deleteQuestion(questionId);
     }
 
-    @GetMapping("/exam/all/{examId}")
-    public ResponseEntity<?> finQuestionsByExamAsAdmin(@PathVariable ("examId") int id) {
-        return ResponseEntity.ok(questionService.finQuestionsByExamAsAdmin(id));
-    }
-
     @PostMapping("/evaluate-exam")
-    public ResponseEntity<?> evaluateExam(@RequestBody List<QuestionDTO> questionsDTO) {
+    public ResponseEntity<ExamResult> evaluateExam(@RequestBody List<QuestionDTO> questionsDTO) {
         return ResponseEntity.ok(questionService.evaluateExam(questionsDTO));
     }
 }

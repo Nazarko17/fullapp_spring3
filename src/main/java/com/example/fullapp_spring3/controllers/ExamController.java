@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/exam")
@@ -21,7 +22,7 @@ public class ExamController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<?> findExams() {
+    public ResponseEntity<Set<ExamDTO>> findExams() {
         return ResponseEntity.ok(examService.findExams());
     }
 
@@ -39,6 +40,7 @@ public class ExamController {
     public void deleteExam(@PathVariable("examId") int id) {
         examService.deleteExam(id);
     }
+
 
     @GetMapping("/active")
     public List<ExamDTO> findByActive() {

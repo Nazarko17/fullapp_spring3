@@ -12,7 +12,8 @@ public class CategoryDTOMapper implements Function<Category, CategoryDTO> {
         return new CategoryDTO(
                 category.getId(),
                 category.getTitle(),
-                category.getDescription()
+                category.getDescription(),
+                category.getNumberOfExams()
         );
     }
 }

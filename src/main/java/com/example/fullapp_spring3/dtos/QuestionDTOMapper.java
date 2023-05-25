@@ -15,7 +15,7 @@ public class QuestionDTOMapper implements Function<Question, QuestionDTO> {
         return new QuestionDTO(
                 question.getId(),
                 question.getContent(),
-                question.getImage(),
+                question.getPoints(),
                 question.getOption1(),
                 question.getOption2(),
                 question.getOption3(),

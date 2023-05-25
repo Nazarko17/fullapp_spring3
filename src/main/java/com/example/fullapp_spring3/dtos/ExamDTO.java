@@ -12,19 +12,23 @@ public class ExamDTO {
     int id;
     String title;
     String description;
-    String maxPoints;
-    String numberOfQuestions;
+    int maxPoints;
+    int numberOfQuestions;
+    int passPercentage;
     boolean isActive;
+    String difficulty;
 
     CategoryDTO categoryDTO;
 
-    public ExamDTO(int id, String title, String description, String maxPoints, String numberOfQuestions, boolean isActive, CategoryDTO categoryDTO) {
+    public ExamDTO(int id, String title, String description, int maxPoints, int numberOfQuestions, int passPercentage, boolean isActive, String difficulty, CategoryDTO categoryDTO) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.maxPoints = maxPoints;
         this.numberOfQuestions = numberOfQuestions;
+        this.passPercentage = passPercentage;
         this.isActive = isActive;
+        this.difficulty = difficulty;
         this.categoryDTO = categoryDTO;
     }
 }

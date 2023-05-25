@@ -15,8 +15,8 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-    @GetMapping("/{id}")
-    public CategoryDTO findCategory(@PathVariable("id") int id) {
+    @GetMapping("/{categoryId}")
+    public CategoryDTO findCategory(@PathVariable("categoryId") int id) {
         return categoryService.findCategory(id);
     }
 
@@ -31,8 +31,8 @@ public class CategoryController {
     }
 
     @PutMapping("/")
-    public CategoryDTO updateCategory(@RequestBody CategoryDTO categoryDTO) {
-        return categoryService.updateCategory(categoryDTO);
+    public ResponseEntity<CategoryDTO>  updateCategory(@RequestBody CategoryDTO categoryDTO) {
+        return ResponseEntity.ok(categoryService.updateCategory(categoryDTO));
     }
 
     @DeleteMapping("/{id}")

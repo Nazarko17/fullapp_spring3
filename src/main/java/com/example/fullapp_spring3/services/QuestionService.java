@@ -4,6 +4,7 @@ import com.example.fullapp_spring3.daos.QuestionDAO;
 import com.example.fullapp_spring3.dtos.QuestionDTO;
 import com.example.fullapp_spring3.dtos.QuestionDTOMapper;
 import com.example.fullapp_spring3.models.Exam;
+import com.example.fullapp_spring3.models.ExamResult;
 import com.example.fullapp_spring3.models.Question;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -29,6 +30,7 @@ public class QuestionService {
         Question question = questionDAO.save(convertToEntity(questionDTO));
         QuestionDTO questionDTO2 = convertToDto(question);
         questionDTO2.setExamDTO(examService.findExam(questionDTO.getExamDTO().getId()));
+        examService.saveMaxPointsAndNumberOfQuestions(questionDTO.getExamDTO().getId());
         return questionDTO2;
     }
 
@@ -36,37 +38,39 @@ public class QuestionService {
         Question question = questionDAO.save(convertToEntity(questionDTO));
         QuestionDTO questionDTO2 = convertToDto(question);
         questionDTO2.setExamDTO(examService.findExam(questionDTO.getExamDTO().getId()));
+        examService.saveMaxPointsAndNumberOfQuestions(questionDTO.getExamDTO().getId());
         return questionDTO2;
     }
 
     public void deleteQuestion(int id) {
-        Question question = new Question();
-        question.setId(id);
-        questionDAO.delete(question);
+        Exam exam = questionDAO.findById(id).getExam();
+        questionDAO.deleteById(id);
+        examService.saveMaxPointsAndNumberOfQuestions(exam.getId());
     }
 
     public Set<QuestionDTO> finQuestionsByExamAsAdmin(int id) {
-        Exam exam = new Exam();
-        exam.setId(id);
-        return questionDAO.findByExam(exam).stream().map(questionDTOMapper).collect(Collectors.toSet());
+        return questionDAO.findByExamId(id).stream().map(questionDTOMapper).collect(Collectors.toSet());
     }
 
-    public Map<String, Object> evaluateExam(List<QuestionDTO> questionsDTO) {
-        int[] achievedPoints = {0};
-        int[] correctAnswers = {0};
+    public ExamResult evaluateExam(List<QuestionDTO> questionsDTO) {
+        return new ExamResult(calculateAchievedPoints(questionsDTO), calculateCorrectAnswers(questionsDTO), checkIsPassed(questionsDTO));
+    }
 
-        questionsDTO.stream()
-                .forEach(q -> {
-                    if (q.getAnswer().equals(q.getCorrectAnswer())) {
-                        correctAnswers[0]++;
-                        achievedPoints[0] += Integer.parseInt(questionsDTO.get(0).getExamDTO().getMaxPoints()) / questionsDTO.size();
-                    }
-                });
+    public int calculateAchievedPoints(List<QuestionDTO> questionsDTO) {
+        return questionsDTO.stream()
+                .filter(q -> (q.getAnswer().equals(q.getCorrectAnswer())))
+                .mapToInt(QuestionDTO::getPoints)
+                .sum();
+    }
 
-        Map<String, Object> answers = new HashMap<>();
-        answers.put("achievedPoints", achievedPoints[0]);
-        answers.put("correctAnswers", correctAnswers[0]);
-        return answers;
+    public int calculateCorrectAnswers(List<QuestionDTO> questionsDTO) {
+        return (int) questionsDTO.stream()
+                .filter(q -> (q.getAnswer().equals(q.getCorrectAnswer())))
+                .count();
+    }
+
+    public boolean checkIsPassed(List<QuestionDTO> questionsDTO) {
+        return calculateAchievedPoints(questionsDTO) >= examService.calculatePointsToPass(questionsDTO.get(0).getExamDTO().getId());
     }
 
     public QuestionDTO convertToDto(Question question) {
@@ -77,4 +81,3 @@ public class QuestionService {
         return modelMapper.map(questionDTO, Question.class);
     }
 }
-

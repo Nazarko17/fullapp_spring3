@@ -39,9 +39,7 @@ public class CategoryService {
     }
 
     public void deleteCategory(int id) {
-        Category category = new Category();
-        category.setId(id);
-        categoryDAO.delete(category);
+        categoryDAO.deleteById(id);
     }
 
     public CategoryDTO convertToDto(Category category) {
@@ -50,5 +48,15 @@ public class CategoryService {
 
     public Category convertToEntity(CategoryDTO categoryDTO) {
         return modelMapper.map(categoryDTO, Category.class);
+    }
+
+    public Category saveNumberOfExams(int id) {
+        Category category = categoryDAO.findById(id);
+        category.setNumberOfExams(findNumberOfExams(id));
+        return categoryDAO.save(category);
+    }
+
+    public int findNumberOfExams(int id) {
+        return categoryDAO.findById(id).getExams().size();
     }
 }

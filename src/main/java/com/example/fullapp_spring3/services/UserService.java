@@ -25,6 +25,19 @@ public class UserService {
         return userDTOMapper.apply(user);
     }
 
+    // temporary method
+    public UserDTO updateUser(UserDTO userDTO) {
+        User user = userDAO.findById(userDTO.getId());
+        user.setUsername(userDTO.getUsername());
+        user.setFirstname(userDTO.getFirstname());
+        user.setSurname(userDTO.getSurname());
+        user.setEmail(userDTO.getEmail());
+        user.setPhoneNumber(userDTO.getPhoneNumber());
+        System.out.println(user);
+        userDAO.save(user);
+        return convertToDto(user);
+    }
+
     public void deleteUser(int id) {
         userDAO.deleteById(id);
     }

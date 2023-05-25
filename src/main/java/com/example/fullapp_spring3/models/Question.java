@@ -17,7 +17,7 @@ public class Question {
 
     @Column(length = 800)
     private String content;
-    private String image;
+    private int points;
     private String option1;
     private String option2;
     private String option3;
