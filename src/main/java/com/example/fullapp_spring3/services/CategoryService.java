@@ -25,7 +25,7 @@ public class CategoryService {
     }
 
     public Set<CategoryDTO> findCategories() {
-        return new LinkedHashSet<>(categoryDAO.findAll().stream().map(categoryDTOMapper).collect(Collectors.toSet()));
+        return categoryDAO.findAll().stream().map(categoryDTOMapper).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     public CategoryDTO saveCategory(CategoryDTO categoryDTO) {
@@ -50,10 +50,10 @@ public class CategoryService {
         return modelMapper.map(categoryDTO, Category.class);
     }
 
-    public Category saveNumberOfExams(int id) {
+    public void saveNumberOfExams(int id) {
         Category category = categoryDAO.findById(id);
         category.setNumberOfExams(findNumberOfExams(id));
-        return categoryDAO.save(category);
+        categoryDAO.save(category);
     }
 
     public int findNumberOfExams(int id) {
