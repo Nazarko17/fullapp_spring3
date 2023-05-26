@@ -29,7 +29,7 @@ public class ExamService {
     }
 
     public Set<ExamDTO> findExams() {
-        return new LinkedHashSet<>(examDAO.findAll().stream().map(examDTOMapper).collect(Collectors.toSet()));
+        return examDAO.findAll().stream().map(examDTOMapper).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     public ExamDTO saveExam(ExamDTO examDTO) {
@@ -74,11 +74,11 @@ public class ExamService {
         return modelMapper.map(examDTO, Exam.class);
     }
 
-    public Exam saveMaxPointsAndNumberOfQuestions(int id) {
+    public void saveMaxPointsAndNumberOfQuestions(int id) {
         Exam exam = examDAO.findById(id);
         exam.setMaxPoints(findMaxPoints(id));
         exam.setNumberOfQuestions(findNumberOfQuestions(id));
-        return examDAO.save(exam);
+        examDAO.save(exam);
     }
 
     public int findMaxPoints(int id) {

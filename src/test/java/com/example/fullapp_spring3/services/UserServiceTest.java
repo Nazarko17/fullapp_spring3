@@ -2,7 +2,6 @@ package com.example.fullapp_spring3.services;
 
 import com.example.fullapp_spring3.daos.UserDAO;
 import com.example.fullapp_spring3.dtos.UserDTO;
-import com.example.fullapp_spring3.dtos.UserDTOMapper;
 import com.example.fullapp_spring3.models.Role;
 import com.example.fullapp_spring3.models.User;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
@@ -25,8 +25,6 @@ class UserServiceTest {
     private UserDAO userDAO;
     @Mock
     private ModelMapper modelMapper;
-    @Mock
-    private UserDTOMapper userDTOMapper;
 
     @InjectMocks
     private UserService userService;
@@ -45,10 +43,19 @@ class UserServiceTest {
     }
 
     @Test
+    void saveUser() {
+        when(userDAO.save(user)).thenReturn(user);
+        User savedUser = userDAO.save(user);
+        assertThat(savedUser).isNotNull();
+        assertThat(savedUser.getId()).isGreaterThan(0);
+    }
+
+    @Test
     void findUser() {
-        when(userDAO.findUserByUsername(user.getUsername())).thenReturn(user);
-        when(userDTOMapper.apply(user)).thenReturn(userDTO);
-        assertEquals(userDTO, userService.findUser(user.getUsername()));
+        when(userService.findUser(user.getUsername())).thenReturn(userDTO);
+        UserDTO userDTO1 = userService.findUser(user.getUsername());
+        assertThat(userDTO1.getUsername()).isEqualTo("johnny");
+        assertEquals(userDTO, userDTO1);
     }
 
     @Test
@@ -76,7 +83,6 @@ class UserServiceTest {
         void throwsExceptionOnEmptyUsername() {
             assertThrows(IllegalArgumentException.class, () -> userService.findUser(""));
         }
-
     }
 
     @Test
