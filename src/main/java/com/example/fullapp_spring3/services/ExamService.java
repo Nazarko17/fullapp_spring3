@@ -34,7 +34,7 @@ public class ExamService {
 
     public ExamDTO saveExam(ExamDTO examDTO) {
         Exam exam = examDAO.save(convertToEntity(examDTO));
-        ExamDTO examDTO2 = convertToDto(exam);
+        ExamDTO examDTO2 = examDTOMapper.apply(exam);
         int categoryID = examDTO.getCategoryDTO().getId();
         examDTO2.setCategoryDTO(categoryService.findCategory(categoryID));
         categoryService.saveNumberOfExams(categoryID);

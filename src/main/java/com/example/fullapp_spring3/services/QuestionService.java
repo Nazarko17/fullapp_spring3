@@ -1,15 +1,22 @@
 package com.example.fullapp_spring3.services;
 
+import com.example.fullapp_spring3.daos.ExamResultDAO;
 import com.example.fullapp_spring3.daos.QuestionDAO;
+import com.example.fullapp_spring3.dtos.ExamResultDTO;
+import com.example.fullapp_spring3.dtos.ExamResultDTOMapper;
 import com.example.fullapp_spring3.dtos.QuestionDTO;
 import com.example.fullapp_spring3.dtos.QuestionDTOMapper;
 import com.example.fullapp_spring3.models.Exam;
 import com.example.fullapp_spring3.models.ExamResult;
 import com.example.fullapp_spring3.models.Question;
+import com.example.fullapp_spring3.models.User;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -20,7 +27,10 @@ public class QuestionService {
     private final ExamService examService;
     private final QuestionDAO questionDAO;
     private final ModelMapper modelMapper;
+    private final ExamResultDAO examResultDAO;
     private final QuestionDTOMapper questionDTOMapper;
+    private final ExamResultDTOMapper examResultDTOMapper;
+    private final UserDetailsServiceImpl userDetailsService;
 
     public QuestionDTO findQuestion(int id) {
         return questionDTOMapper.apply(questionDAO.findById(id));
@@ -52,8 +62,17 @@ public class QuestionService {
         return questionDAO.findByExamId(id).stream().map(questionDTOMapper).collect(Collectors.toSet());
     }
 
-    public ExamResult evaluateExam(List<QuestionDTO> questionsDTO) {
-        return new ExamResult(calculateAchievedPoints(questionsDTO), calculateCorrectAnswers(questionsDTO), checkIsPassed(questionsDTO));
+    public ExamResultDTO evaluateExam(List<QuestionDTO> questionsDTO, Principal principal) {
+        DateFormat df = new SimpleDateFormat("hh:mm dd-MM-yyyy");
+        ExamResult examResult = new ExamResult(
+                questionsDTO.get(0).getExamDTO().getTitle(),
+                calculateAchievedPoints(questionsDTO),
+                calculateCorrectAnswers(questionsDTO),
+                df.format(Calendar.getInstance().getTime()),
+                checkIsPassed(questionsDTO),
+                (User) userDetailsService.loadUserByUsername(principal.getName()));
+        examResultDAO.save(examResult);
+        return examResultDTOMapper.apply(examResult);
     }
 
     public int calculateAchievedPoints(List<QuestionDTO> questionsDTO) {
@@ -79,5 +98,9 @@ public class QuestionService {
 
     public Question convertToEntity(QuestionDTO questionDTO) {
         return modelMapper.map(questionDTO, Question.class);
+    }
+
+    public ExamResultDTO convertToDtoExamResult(ExamResult examResult) {
+        return modelMapper.map(examResult, ExamResultDTO.class);
     }
 }
