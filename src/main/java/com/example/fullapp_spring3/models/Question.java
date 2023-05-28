@@ -29,3 +29,4 @@ public class Question {
     @ManyToOne(fetch = FetchType.EAGER)
     private Exam exam;
 }
+

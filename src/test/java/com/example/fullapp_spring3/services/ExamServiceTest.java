@@ -32,6 +32,8 @@ class ExamServiceTest {
     private ModelMapper modelMapper;
     @Mock
     private ExamDTOMapper examDTOMapper;
+    @Mock
+    private CategoryService categoryService;
 
     @InjectMocks
     private ExamService examService;

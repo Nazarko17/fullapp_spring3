@@ -1,5 +1,6 @@
 package com.example.fullapp_spring3.controllers;
 
+import com.example.fullapp_spring3.dtos.ExamResultDTO;
 import com.example.fullapp_spring3.dtos.QuestionDTO;
 import com.example.fullapp_spring3.models.ExamResult;
 import com.example.fullapp_spring3.services.QuestionService;
@@ -7,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.*;
 
 @RestController
@@ -42,7 +44,7 @@ public class QuestionController {
     }
 
     @PostMapping("/evaluate-exam")
-    public ResponseEntity<ExamResult> evaluateExam(@RequestBody List<QuestionDTO> questionsDTO) {
-        return ResponseEntity.ok(questionService.evaluateExam(questionsDTO));
+    public ResponseEntity<?> evaluateExam(@RequestBody List<QuestionDTO> questionsDTO, Principal principal) {
+        return ResponseEntity.ok(questionService.evaluateExam(questionsDTO, principal));
     }
 }
