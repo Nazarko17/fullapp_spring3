@@ -2,10 +2,7 @@ package com.example.fullapp_spring3.services;
 
 import com.example.fullapp_spring3.daos.ExamResultDAO;
 import com.example.fullapp_spring3.daos.QuestionDAO;
-import com.example.fullapp_spring3.dtos.ExamResultDTO;
-import com.example.fullapp_spring3.dtos.ExamResultDTOMapper;
-import com.example.fullapp_spring3.dtos.QuestionDTO;
-import com.example.fullapp_spring3.dtos.QuestionDTOMapper;
+import com.example.fullapp_spring3.dtos.*;
 import com.example.fullapp_spring3.models.Exam;
 import com.example.fullapp_spring3.models.ExamResult;
 import com.example.fullapp_spring3.models.Question;
@@ -65,11 +62,11 @@ public class QuestionService {
     public ExamResultDTO evaluateExam(List<QuestionDTO> questionsDTO, Principal principal) {
         DateFormat df = new SimpleDateFormat("hh:mm dd-MM-yyyy");
         ExamResult examResult = new ExamResult(
-                questionsDTO.get(0).getExamDTO().getTitle(),
                 calculateAchievedPoints(questionsDTO),
                 calculateCorrectAnswers(questionsDTO),
                 df.format(Calendar.getInstance().getTime()),
                 checkIsPassed(questionsDTO),
+                examService.convertToEntity(questionsDTO.get(0).getExamDTO()),
                 (User) userDetailsService.loadUserByUsername(principal.getName()));
         examResultDAO.save(examResult);
         return examResultDTOMapper.apply(examResult);
@@ -98,9 +95,5 @@ public class QuestionService {
 
     public Question convertToEntity(QuestionDTO questionDTO) {
         return modelMapper.map(questionDTO, Question.class);
-    }
-
-    public ExamResultDTO convertToDtoExamResult(ExamResult examResult) {
-        return modelMapper.map(examResult, ExamResultDTO.class);
     }
 }

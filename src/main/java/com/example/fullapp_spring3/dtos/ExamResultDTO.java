@@ -8,7 +8,6 @@ import lombok.Data;
 @AllArgsConstructor
 public class ExamResultDTO {
     private int id;
-    private String examTitle;
     private int achievedPoints;
     private int correctAnswers;
     private String completionTime;
@@ -16,5 +15,6 @@ public class ExamResultDTO {
     @JsonProperty("isPassed")
     private boolean isPassed;
 
+    private ExamDTO examDTO;
     private UserDTO userDTO;
 }

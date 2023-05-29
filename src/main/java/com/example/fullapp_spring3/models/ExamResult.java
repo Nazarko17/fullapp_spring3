@@ -13,7 +13,6 @@ public class ExamResult {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String examTitle;
     private int achievedPoints;
     private int correctAnswers;
     private String completionTime;
@@ -22,14 +21,17 @@ public class ExamResult {
     private boolean isPassed;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    private Exam exam;
+
+    @ManyToOne(fetch = FetchType.EAGER)
     private User user;
 
-    public ExamResult(String examTitle, int achievedPoints, int correctAnswers, String completionTime, boolean isPassed, User user) {
-        this.examTitle = examTitle;
+    public ExamResult(int achievedPoints, int correctAnswers, String completionTime, boolean isPassed, Exam exam, User user) {
         this.achievedPoints = achievedPoints;
         this.correctAnswers = correctAnswers;
         this.completionTime = completionTime;
         this.isPassed = isPassed;
+        this.exam = exam;
         this.user = user;
     }
 }
