@@ -1,7 +1,6 @@
 package com.example.fullapp_spring3.dtos;
 
 import com.example.fullapp_spring3.models.ExamResult;
-import com.example.fullapp_spring3.models.Question;
 import org.springframework.stereotype.Service;
 
 import java.util.function.Function;

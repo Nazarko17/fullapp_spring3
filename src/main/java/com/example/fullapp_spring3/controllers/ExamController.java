@@ -1,6 +1,8 @@
 package com.example.fullapp_spring3.controllers;
 
 import com.example.fullapp_spring3.dtos.ExamDTO;
+import com.example.fullapp_spring3.dtos.ExamResultDTO;
+import com.example.fullapp_spring3.services.ExamResultService;
 import com.example.fullapp_spring3.services.ExamService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,7 @@ import java.util.Set;
 public class ExamController {
 
     private final ExamService examService;
+    private final ExamResultService examResultService;
 
     @GetMapping("/{examId}")
     public ExamDTO findExamById(@PathVariable("examId") int id) {
@@ -55,5 +58,15 @@ public class ExamController {
     @GetMapping("/category/active/{categoryId}")
     public List<ExamDTO> findByCategoryIdAndIsActive(@PathVariable("categoryId") int categoryId) {
         return examService.findByCategoryIdAndIsActive(categoryId);
+    }
+
+    @GetMapping("/results")
+    public ResponseEntity<Set<ExamResultDTO>> findExamResults() {
+        return ResponseEntity.ok(examResultService.findExamResults());
+    }
+
+    @DeleteMapping("/results/delete")
+    public void deleteExamResults() {
+        examResultService.deleteExamResults();
     }
 }

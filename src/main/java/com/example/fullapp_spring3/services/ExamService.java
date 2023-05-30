@@ -74,10 +74,11 @@ public class ExamService {
         return modelMapper.map(examDTO, Exam.class);
     }
 
-    public void saveMaxPointsAndNumberOfQuestions(int id) {
+    public void saveExamParameters(int id) {
         Exam exam = examDAO.findById(id);
         exam.setMaxPoints(findMaxPoints(id));
         exam.setNumberOfQuestions(findNumberOfQuestions(id));
+        exam.setPointsToPass(calculatePointsToPass(id));
         examDAO.save(exam);
     }
 

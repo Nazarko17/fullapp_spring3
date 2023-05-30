@@ -37,7 +37,7 @@ public class QuestionService {
         Question question = questionDAO.save(convertToEntity(questionDTO));
         QuestionDTO questionDTO2 = convertToDto(question);
         questionDTO2.setExamDTO(examService.findExam(questionDTO.getExamDTO().getId()));
-        examService.saveMaxPointsAndNumberOfQuestions(questionDTO.getExamDTO().getId());
+        examService.saveExamParameters(questionDTO.getExamDTO().getId());
         return questionDTO2;
     }
 
@@ -45,14 +45,14 @@ public class QuestionService {
         Question question = questionDAO.save(convertToEntity(questionDTO));
         QuestionDTO questionDTO2 = convertToDto(question);
         questionDTO2.setExamDTO(examService.findExam(questionDTO.getExamDTO().getId()));
-        examService.saveMaxPointsAndNumberOfQuestions(questionDTO.getExamDTO().getId());
+        examService.saveExamParameters(questionDTO.getExamDTO().getId());
         return questionDTO2;
     }
 
     public void deleteQuestion(int id) {
         Exam exam = questionDAO.findById(id).getExam();
         questionDAO.deleteById(id);
-        examService.saveMaxPointsAndNumberOfQuestions(exam.getId());
+        examService.saveExamParameters(exam.getId());
     }
 
     public Set<QuestionDTO> finQuestionsByExamAsAdmin(int id) {
@@ -86,7 +86,7 @@ public class QuestionService {
     }
 
     public boolean checkIsPassed(List<QuestionDTO> questionsDTO) {
-        return calculateAchievedPoints(questionsDTO) >= examService.calculatePointsToPass(questionsDTO.get(0).getExamDTO().getId());
+        return calculateAchievedPoints(questionsDTO) >= questionsDTO.get(0).getExamDTO().getPointsToPass();
     }
 
     public QuestionDTO convertToDto(Question question) {

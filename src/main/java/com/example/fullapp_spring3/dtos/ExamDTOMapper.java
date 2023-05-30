@@ -19,8 +19,9 @@ public class ExamDTOMapper implements Function<Exam, ExamDTO> {
                 exam.getMaxPoints(),
                 exam.getNumberOfQuestions(),
                 exam.getPassPercentage(),
-                exam.isActive(),
+                exam.getPointsToPass(),
                 exam.getDifficulty(),
+                exam.isActive(),
                 categoryDTOMapper.apply(exam.getCategory())
         );
     }
