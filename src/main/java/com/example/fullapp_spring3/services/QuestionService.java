@@ -86,7 +86,7 @@ public class QuestionService {
     }
 
     public boolean checkIsPassed(List<QuestionDTO> questionsDTO) {
-        return calculateAchievedPoints(questionsDTO) >= examService.calculatePointsToPass(questionsDTO.get(0).getExamDTO().getId());
+        return calculateAchievedPoints(questionsDTO) >= questionsDTO.get(0).getExamDTO().getPointsToPass();
     }
 
     public QuestionDTO convertToDto(Question question) {
