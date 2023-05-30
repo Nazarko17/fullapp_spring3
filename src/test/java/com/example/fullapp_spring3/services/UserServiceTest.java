@@ -2,6 +2,7 @@ package com.example.fullapp_spring3.services;
 
 import com.example.fullapp_spring3.daos.UserDAO;
 import com.example.fullapp_spring3.dtos.UserDTO;
+import com.example.fullapp_spring3.dtos.UserDTOMapper;
 import com.example.fullapp_spring3.models.Role;
 import com.example.fullapp_spring3.models.User;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,6 +26,8 @@ class UserServiceTest {
     private UserDAO userDAO;
     @Mock
     private ModelMapper modelMapper;
+    @Mock
+    private UserDTOMapper userDTOMapper;
 
     @InjectMocks
     private UserService userService;

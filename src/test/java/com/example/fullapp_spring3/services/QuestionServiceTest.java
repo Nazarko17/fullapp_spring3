@@ -44,7 +44,7 @@ class QuestionServiceTest {
     void setUp() {
         Exam exam = Exam.builder().id(1).title("Test").passPercentage(80)
                 .description("Description").isActive(true).build();
-        ExamDTO examDTO = ExamDTO.builder().id(1).title("Test")
+        ExamDTO examDTO = ExamDTO.builder().id(1).title("Test").passPercentage(80)
                 .description("Description").isActive(true).build();
         question = Question.builder().id(5).content("test").option1("1")
                 .option2("2").option3("3").option4("4").correctAnswer("3")
@@ -67,7 +67,6 @@ class QuestionServiceTest {
         assertThat(questionDTO1.getId()).isEqualTo(5);
     }
 
-    // TODO:
     @Test
     void saveQuestion() {
         when(questionService.saveQuestion(questionDTO)).thenReturn(questionDTO);
@@ -101,8 +100,7 @@ class QuestionServiceTest {
 
     @Test
     void isPassed() {
-        when(examService.calculatePointsToPass(1)).thenReturn(24);
-        assertThat(questionService.checkIsPassed(questionDTOs)).isFalse();
+        assertThat(questionService.checkIsPassed(questionDTOs)).isTrue();
     }
 
     @Test

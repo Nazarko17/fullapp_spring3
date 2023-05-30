@@ -79,7 +79,6 @@ class ExamServiceTest {
         assertEquals(examDTOs, examDAO.findAll().stream().map(examDTOMapper).collect(Collectors.toList()));
     }
 
-    // TODO:
     @Test
     void saveExam() {
         when(examService.saveExam(examDTO)).thenReturn(examDTO);

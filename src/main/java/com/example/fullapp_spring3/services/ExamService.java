@@ -34,18 +34,14 @@ public class ExamService {
 
     public ExamDTO saveExam(ExamDTO examDTO) {
         Exam exam = examDAO.save(convertToEntity(examDTO));
-        ExamDTO examDTO2 = examDTOMapper.apply(exam);
-        int categoryID = examDTO.getCategoryDTO().getId();
-        examDTO2.setCategoryDTO(categoryService.findCategory(categoryID));
-        categoryService.saveNumberOfExams(categoryID);
-        return examDTO2;
+        categoryService.saveNumberOfExams(examDTO.getCategoryDTO().getId());
+        return examDTOMapper.apply(exam);
     }
 
     public ExamDTO updateExam(ExamDTO examDTO) {
         Exam exam = examDAO.save(convertToEntity(examDTO));
-        ExamDTO examDTO2 = convertToDto(exam);
-        examDTO2.setCategoryDTO(categoryService.findCategory(examDTO.getCategoryDTO().getId()));
-        return examDTO2;
+        categoryService.saveNumberOfExams(examDTO.getCategoryDTO().getId());
+        return examDTOMapper.apply(exam);
     }
 
     public void deleteExam(int id) {

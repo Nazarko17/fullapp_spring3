@@ -33,20 +33,19 @@ public class QuestionService {
         return questionDTOMapper.apply(questionDAO.findById(id));
     }
 
+    // examDTO returns "null"
     public QuestionDTO saveQuestion(QuestionDTO questionDTO) {
         Question question = questionDAO.save(convertToEntity(questionDTO));
-        QuestionDTO questionDTO2 = convertToDto(question);
-        questionDTO2.setExamDTO(examService.findExam(questionDTO.getExamDTO().getId()));
+//        QuestionDTO questionDTO2 = convertToDto(question);
+//        questionDTO2.setExamDTO(examService.findExam(questionDTO.getExamDTO().getId()));
         examService.saveExamParameters(questionDTO.getExamDTO().getId());
-        return questionDTO2;
+        return convertToDto(question);
     }
 
     public QuestionDTO updateQuestion(QuestionDTO questionDTO) {
         Question question = questionDAO.save(convertToEntity(questionDTO));
-        QuestionDTO questionDTO2 = convertToDto(question);
-        questionDTO2.setExamDTO(examService.findExam(questionDTO.getExamDTO().getId()));
         examService.saveExamParameters(questionDTO.getExamDTO().getId());
-        return questionDTO2;
+        return questionDTOMapper.apply(question);
     }
 
     public void deleteQuestion(int id) {

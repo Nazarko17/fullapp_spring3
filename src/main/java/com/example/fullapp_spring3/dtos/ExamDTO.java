@@ -3,10 +3,13 @@ package com.example.fullapp_spring3.dtos;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+
 
 @Data
-@NoArgsConstructor
 @Builder
+@NoArgsConstructor
+@ToString
 public class ExamDTO {
 
     int id;

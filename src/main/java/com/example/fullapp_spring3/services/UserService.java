@@ -21,8 +21,7 @@ public class UserService {
         if(username == null || username.equals("   ") || username.equals("")){
             throw new IllegalArgumentException("Username is not valid! Username provided " + username);
         }
-        User user = userDAO.findUserByUsername(username);
-        return userDTOMapper.apply(user);
+        return userDTOMapper.apply(userDAO.findUserByUsername(username));
     }
 
     // temporary method
