@@ -1,6 +1,7 @@
 package com.example.fullapp_spring3.controllers;
 
 import com.example.fullapp_spring3.dtos.UserDTO;
+import com.example.fullapp_spring3.services.JwtService;
 import com.example.fullapp_spring3.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
+    private final JwtService jwtService;
 
     @GetMapping("/{username}")
     public UserDTO findUser(@PathVariable("username") String username) {
@@ -26,5 +28,10 @@ public class UserController {
     @DeleteMapping("/{userId}")
     public void deleteUser(@PathVariable("userId") int id) {
         userService.deleteUser(id);
+    }
+
+    @GetMapping("/token")
+    public String extractUsername(@RequestBody String token) {
+        return userService.findUser(jwtService.extractUsername(token)).getEmail();
     }
 }
